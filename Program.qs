@@ -19,14 +19,14 @@ namespace quantum {
             H(q1);
             let resultsQ1 = M(q1);
             if(resultsQ1 == Zero){
-                let answer = Solve(I);
-                Message($"answer = {answer} when it was I");
+                let answer = Solve(Z);
+                Message($"answer = {answer} when it was Z");
                 if(answer == 0){
                     set correct+=1;
                 }
             }else{
-                let answer = Solve(Z);
-                Message($"answer = {answer} when it was Z");
+                let answer = Solve(S);
+                Message($"answer = {answer} when it was S");
                 if(answer == 1){
                     set correct+=1;
                 }
@@ -50,7 +50,9 @@ namespace quantum {
         using (q1 = Qubit()){
             H(q1);
             unitary(q1);
+            unitary(q1); // either I or Z
             H(q1);
+
             let res = M(q1);
             if(res == Zero){ return 0; }
             else{ 
