@@ -25,8 +25,8 @@ namespace quantum {
                     set correct+=1;
                 }
             }else{
-                let answer = Solve(X);
-                Message($"answer = {answer} when it was X");
+                let answer = Solve(Z);
+                Message($"answer = {answer} when it was Z");
                 if(answer == 1){
                     set correct+=1;
                 }
@@ -35,9 +35,22 @@ namespace quantum {
         return (correct, count-correct);
     }
 
+    // numerical proof that hadamard is its own inverse
+    operation Proof_hadamard_is_own_inverse(): Int{
+        for i in 1..1000{
+            use q1 = Qubit();
+            H(q1);
+            H(q1);
+            if(M(q1) == One){ return 0; }
+        }
+        return 1;
+    }
+
     operation Solve (unitary : (Qubit => Unit is Adj+Ctl)) : Int {
         using (q1 = Qubit()){
+            H(q1);
             unitary(q1);
+            H(q1);
             let res = M(q1);
             if(res == Zero){ return 0; }
             else{ 
