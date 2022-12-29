@@ -6,7 +6,7 @@ namespace Solution {
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Diagnostics;
-    operation Solve (unitary : (Qubit => Unit is Adj+Ctl)) : Int {
+    operation Q1356_Q2(unitary : (Qubit => Unit is Adj+Ctl)) : Int {
         using (q1 = Qubit()){
             H(q1);
             unitary(q1);
