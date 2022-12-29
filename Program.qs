@@ -12,24 +12,38 @@ namespace quantum {
     @EntryPoint()
     operation SayHello(count: Int) : (Int, Int) {
         Message("Hadamard Gate");
-        mutable numZerosQ1 = 0;
-        mutable numOnesQ1 = 0;
+        mutable correct = 0;
         for i in 1..count {
             use (q1) = Qubit();
-            SetQubitState(One, q1);
+            SetQubitState(Zero, q1);
             H(q1);
             let resultsQ1 = M(q1);
             if(resultsQ1 == Zero){
-                set numZerosQ1 += 1;
+                let answer = Solve(I);
+                Message($"answer = {answer} when it was I");
+                if(answer == 0){
+                    set correct+=1;
+                }
             }else{
-                set numOnesQ1 += 1;
+                let answer = Solve(X);
+                Message($"answer = {answer} when it was X");
+                if(answer == 1){
+                    set correct+=1;
+                }
             }
         }
-        return (numZerosQ1, numOnesQ1);
+        return (correct, count-correct);
     }
 
-    operation Solve(unitary: (Qubit => Unit is Adj+Ctl), q1: Qubit): Int {
-        unitary(q1);
-        return 1;
+    operation Solve (unitary : (Qubit => Unit is Adj+Ctl)) : Int {
+        using (q1 = Qubit()){
+            unitary(q1);
+            let res = M(q1);
+            if(res == Zero){ return 0; }
+            else{ 
+                X(q1);
+                return 1; 
+            }
+        }
     }
 }
